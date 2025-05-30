@@ -1,0 +1,40 @@
+{
+  "courses": [
+    {
+      "id": "CS101",
+      "name": "자료구조",
+      "professor": "김교수",
+      "credits": 3,
+      "required": true,
+      "grade_limit": [2, 3, 4],
+      "type": "전공",
+      "method": "대면",
+      "schedule": [
+        {
+          "day": "월",
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "location": ["공학관", "201"]
+        },
+        {
+          "day": "수",
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "location": ["공학관", "201"]
+        }
+      ],
+      "grading": "상대평가",
+      "team_project": false,
+      "feedback": {
+        "difficulty": [4.2, 5],
+        "satisfaction": [3.8, 7],
+        "previous_comments": [
+          "과제 많음",
+          "시험 난이도 보통",
+          "출석 중요"
+        ]
+      }
+    }
+    // … 다른 과목들
+  ]
+}
