@@ -1,0 +1,32 @@
+version: '3.8'  # Docker Compose 파일 포맷 버전 정의
+services:
+  web:  # 웹 애플리케이션 서비스 정의
+    build: 
+      context: .  # 현재 디렉토리를 도커 빌드 컨텍스트로 사용
+      dockerfile: Dockerfile  # Dockerfile의 파일명을 명시
+    command: npm run dev  # 컨테이너가 실행되면 Next.js 개발 서버 실행
+    volumes:
+      - .:/app  # 현재 프로젝트 디렉토리를 컨테이너의 /app에 마운트
+      - /app/node_modules  # node_modules는 로컬과 분리해 충돌 방지
+    ports:
+      - '3000:3000'  # 호스트의 3000 포트를 컨테이너의 3000 포트와 연결 (Next.js 접속용)
+    environment:
+      DATABASE_URL: ${DATABASE_URL} # 웹 앱에서 사용할 MySQL 연결 문자열 (USER:PASSWORD@HOST:PORT/DB_NAME)
+    depends_on:
+      - db  # db 서비스가 먼저 실행된 후 web이 실행되도록 순서 설정
+
+  db:  # MySQL 데이터베이스 서비스 정의
+    image: mysql:8.0  # MySQL 8.0 공식 이미지 사용
+    restart: always  # 컨테이너가 중단되면 항상 재시작하도록 설정
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # root 계정 비밀번호 설정
+      MYSQL_DATABASE: fridge_db  # 최초 자동 생성할 데이터베이스 이름
+      MYSQL_USER: ${MYSQL_USER}  # Prisma가 접속할 계정 (root 사용)
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}  # 해당 계정의 비밀번호
+    ports:
+      - '3306:3306'  # 호스트의 3306 포트를 컨테이너의 3306 포트에 연결 (MySQL 기본 포트)
+    volumes:
+      - mysqldata:/var/lib/mysql  # MySQL 데이터 파일을 로컬 볼륨에 영구 저장
+
+volumes:
+  mysqldata:  # MySQL 데이터 유지용 Docker 볼륨 정의
