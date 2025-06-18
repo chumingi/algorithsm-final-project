@@ -4,12 +4,22 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// Prisma 클라이언트 생성 설정
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
+// 데이터베이스 설정: MySQL을 사용하도록 지정
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+// User 모델 정의: 이메일/비밀번호 해시 저장
+model User {
+  id        Int      @id @default(autoincrement())   // 자동 증가하는 기본키
+  email     String   @unique                          // 중복 불가
+  password  String                                    // bcrypt 해시값 저장
+  createdAt DateTime @default(now())                  // 가입 시각
 }
